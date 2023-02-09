@@ -1,0 +1,36 @@
+* {
+    margin: 0;
+}
+h3 {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+input {
+  width: 200px;
+}
+button {
+  margin-top: 20px;
+  width: 100px;
+}
+#prods {
+    margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+#prods div {
+    display: flex;
+    flex-direction: column;
+    width: 120px;
+    padding: 10px;
+    border: solid 2px #000;
+    border-radius: 10px;
+    line-height: 1.8;
+}

@@ -1,0 +1,47 @@
+[
+    {
+        "id": "1",
+        "title": "Samsung Galaxy S23 Ultra",
+        "price": "2500",
+        "thumbnail": "https:asdasdasd",
+        "description": "esto es un producto",
+        "code": "3020",
+        "stock": 100
+    },
+    {
+        "id": "2",
+        "title": "Iphone 14 Pro Max",
+        "price": "3500",
+        "thumbnail": "https:asdasdasd",
+        "description": "esto es un producto",
+        "code": "3020",
+        "stock": 100
+    },
+    {
+        "title": "Motorola G30 Pro",
+        "price": "2300",
+        "thumbnail": "https:asdasdasd",
+        "description": "esto es un producto",
+        "code": "3020",
+        "stock": 100,
+        "id": "3"
+    },
+    {
+        "id": "4",
+        "title": "Samsung Galaxy S22 Plus",
+        "price": "2100",
+        "thumbnail": "https:asdasdasd",
+        "description": "esto es un producto",
+        "code": "3020",
+        "stock": 100
+    },
+    {
+        "id": "5",
+        "title": "Iphone 12 Pro Max",
+        "price": "2000",
+        "thumbnail": "https:asdasdasd",
+        "description": "esto es un producto",
+        "code": "3020",
+        "stock": 100
+    }
+]
