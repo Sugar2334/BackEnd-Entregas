@@ -1,0 +1,35 @@
+<div id="prod">
+
+</div>
+
+
+<div>
+    <h2>Agregar producto</h2>
+    <form>
+        <label>Titulo</label>
+        <input type="text" name="title" id="title"  required>
+        <label>Descripcion</label>
+        <input name="description" id="description" required>
+        <label>Precio</label>
+        <input name="price" id="price" required>
+        <label>Imagen</label>
+        <input name="thumbnail" id="thumbnail" required>
+        <label>Codigo</label>
+        <input name="code" id="code" required>
+        <label>Stock</label>
+        <input name="stock" id="stock" required>
+        <button id="enviar">Enviar</button>
+        <input value="Limpiar campos" type="reset">
+    </form>
+</div>
+
+<div>
+    <form>
+    <label for="id">ID del producto:</label>
+    <input type="text" name="id" id="id">
+    <button id="eliminar">Borrar producto</button>
+    </form>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/scripts/index.js"></script>
