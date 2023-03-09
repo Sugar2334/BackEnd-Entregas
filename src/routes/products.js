@@ -3,11 +3,11 @@ import ProductManager from '../daos/product-manager.js'
 
 const router = Router()
 
-const motos = new ProductManager('./src/mockDB/productos.json')
-motos.getProducts()
+const tech = new ProductManager('./src/mockDB/productos.json')
+tech.getProducts()
 
 router.get('/', async (request, response) => {
-    let products = await motos.getProducts()
+    let products = await tech.getProducts()
     const { limit } = request.query
 
     if (limit >= 1 && limit <= products.length) {
@@ -18,7 +18,7 @@ router.get('/', async (request, response) => {
 })
 
 router.get('/:pid', (request, response) =>{
-    let products = motos.getProducts()
+    let products = tech.getProducts()
 
     let pid = request.params['pid']
     const product = products.find(prod => prod.id === pid)
@@ -40,7 +40,7 @@ router.post('/', (request, response) => {
         return response.status(400).send(`Faltan parametros: ${missingFields.join(', ')}`);
     }
 
-    motos.addProduct(title, description, price, thumbnail, code, stock);
+    tech.addProduct(title, description, price, thumbnail, code, stock);
     response.status(201).send('Producto añadido exitosamente');
 })
 
@@ -48,7 +48,7 @@ router.put('/:pid', async (request, response) => {
     let pid = request.params['pid']
     let key = request.body;
     try {
-        motos.updateProduct(pid, key);
+        tech.updateProduct(pid, key);
         response.status(201).send('Producto actualizado')
     } catch (err) {
         response.status(500).send('Falla al actualizar producto')
@@ -59,7 +59,7 @@ router.put('/:pid', async (request, response) => {
 router.delete('/:pid', async (request, response) => {
     let pid = request.params['pid']
     try {
-        motos.deleteProduct(pid)
+        tech.deleteProduct(pid)
         response.status(200).send('Producto eliminado')
     } catch(err) {
         response.status(500).send('No se logro eliminar el producto')
