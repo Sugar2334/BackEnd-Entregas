@@ -11,6 +11,15 @@ class ProductManager {
     }
   }
 
+  async getPagination(page = 1, limit = 10, sort = undefined, query = {}) {
+    try {
+      const pags = await productModel.paginate(query, { limit, page, sort })
+      return pags
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   async addProduct(obj) {
     try {
       const newProd = await productModel.create(obj);

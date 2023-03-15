@@ -1,47 +1,57 @@
 [
     {
         "id": "1",
+        "status": true,
         "title": "Samsung Galaxy S23 Ultra",
+        "description": "esto es un producto",
         "price": "2500",
         "thumbnail": "https:asdasdasd",
-        "description": "esto es un producto",
         "code": "3020",
-        "stock": 100
+        "stock": 100,
+        "category": "samsung"
     },
     {
         "id": "2",
         "title": "Iphone 14 Pro Max",
+        "status": true,
+        "description": "esto es un producto",
         "price": "3500",
         "thumbnail": "https:asdasdasd",
-        "description": "esto es un producto",
-        "code": "3020",
-        "stock": 100
-    },
-    {
-        "title": "Motorola G30 Pro",
-        "price": "2300",
-        "thumbnail": "https:asdasdasd",
-        "description": "esto es un producto",
         "code": "3020",
         "stock": 100,
-        "id": "3"
+        "category": "apple"
+    },
+    {
+        "id": "3",
+        "status": true,
+        "title": "Motorola G30 Pro",
+        "description": "esto es un producto",
+        "price": "2300",
+        "thumbnail": "https:asdasdasd",
+        "code": "3020",
+        "stock": 100,
+        "category": "motorola"
     },
     {
         "id": "4",
+        "status": true,
         "title": "Samsung Galaxy S22 Plus",
+        "description": "esto es un producto",
         "price": "2100",
         "thumbnail": "https:asdasdasd",
-        "description": "esto es un producto",
         "code": "3020",
-        "stock": 100
+        "stock": 100,
+        "category": "samsung"
     },
     {
         "id": "5",
+        "status": true,
         "title": "Iphone 12 Pro Max",
+        "description": "esto es un producto",
         "price": "2000",
         "thumbnail": "https:asdasdasd",
-        "description": "esto es un producto",
         "code": "3020",
-        "stock": 100
+        "stock": 100,
+        "category": "apple"
     }
 ]

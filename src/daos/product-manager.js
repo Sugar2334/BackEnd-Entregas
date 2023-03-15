@@ -1,104 +1,106 @@
-import fs from 'fs'
-//const fs = require('fs')
+import fs from "fs/promises";
 
 class ProductManager {
-    constructor(ruta) {
-        this.path = ruta
+  constructor(path) {
+    this.path = path;
+  }
+
+  async getProducts() {
+    try {
+      const read = await fs.readFile(this.path, "utf-8");
+      return JSON.parse(read);
+    } catch (err) {
+      console.log(err);
     }
+  }
 
-    getProducts = () => {
-        if (fs.existsSync(this.path)) {
-            let products = []
-            return products = JSON.parse(fs.readFileSync(this.path, 'utf-8'))
-        } else {
-            fs.writeFileSync(this.path, '[]', 'utf-8')
-            let products = []
-            return products
+  async addProduct(obj) {
+    try {
+      let status = true;
+
+      const read = await fs.readFile(this.path, "utf-8");
+      const prods = JSON.parse(read);
+      prods.map((e) => {
+        if (e.code === obj.code) {
+          status = false;
         }
+      });
+
+      if (status === false) {
+        return { error: "Código identificador existente" };
+      }
+
+      if (
+        obj.title &&
+        obj.description &&
+        obj.code &&
+        obj.price &&
+        obj.stock &&
+        obj.category
+      ) {
+        const id =
+          prods.length === 0 ? 0 : Number(prods[prods.length - 1].id) + 1;
+        prods.push({ id, status: true, ...obj });
+        await fs.writeFile(this.path, JSON.stringify(prods, null, 2), "utf-8");
+        return { message: "producto agregado" };
+      } else {
+        return { error: "faltan campos obligatorios" };
+      }
+    } catch (err) {
+      console.log(err);
     }
-    
+  }
 
-    addProduct = (title, description, code, price, thumbnail, stock,) => {
-        let products = this.getProducts()
-        const product = {
-            title,
-            description,
-            price,
-            thumbnail,
-            code,
-            stock,
-            status: true
-        }
-
-
-        if (products.length === 0) {
-            product.id = 1
-        } else {
-            product.id = products[products.length - 1].id + 1
-        }
-    
-        let found = products.some(p => p.code === code)
-        if (!found) {
-            products.push(product)
-            fs.writeFileSync(this.path, JSON.stringify(products), 'utf-8')
-            //console.log(this.products)
-        } else {
-            console.log('El codigo ya existe, intente con otro')
-        }
-        
+  async getProductById(id) {
+    try {
+      const read = await fs.readFile(this.path, "utf-8");
+      const prods = JSON.parse(read);
+      const isHere = prods.find((e) => e.id === id);
+      if (isHere) {
+        return isHere;
+      } else {
+        return { error: "No encontrado" };
+      }
+    } catch (err) {
+      console.log(err);
     }
+  }
 
-    getProductById = (id) => {
-        let products = this.getProducts()
-        let searchedId = (products.find(p => p.id === id))
-        if (searchedId) {
-            return searchedId
-        } else {
-            console.log('ID not found')
-        }
+  async updateProduct(id, field, elem) {
+    try {
+      const read = await fs.readFile(this.path, "utf-8");
+      const prods = JSON.parse(read);
+      const isHere = prods.find((e) => e.id === id);
+      if (isHere) {
+        let item = prods.find((e) => e.id === id);
+        item[field] = elem;
+        prods.splice(id, 1, item);
+        await fs.writeFile(this.path, JSON.stringify(prods, null, 2), "utf-8");
+        return { mesage: "Producto actualizado" };
+      } else {
+        return { error: "No encontrado" };
+      }
+    } catch (err) {
+      console.log(err);
     }
+  }
 
-    updateProduct = (id, key) => {
-        let products = this.getProducts()
-        let objIndex = products.findIndex(obj => obj.id === id)
-        if (objIndex === -1) {
-            console.log("Producto no encontrado");
-            return;
-        }
-        if (key.title) {
-            products[objIndex].title = key.title;
-        }
-        if (key.description) {
-            products[objIndex].description = key.description;
-        }
-        if (key.price) {
-            products[objIndex].price = key.price;
-        }
-        if (key.thumbnail) {
-            products[objIndex].thumbnail = key.thumbnail;
-        }
-        if (key.stock) {
-            products[objIndex].stock = key.stock;
-        }
-        if (key.status) {
-            products[objIndex].status = key.stock;
-        }
-
-        fs.writeFileSync(this.path, JSON.stringify(products), 'utf-8')
+  async deleteProduct(id) {
+    try {
+      const read = await fs.readFile(this.path, "utf-8");
+      const prods = JSON.parse(read);
+      const isHere = prods.find((e) => e.id === id);
+      if (isHere) {
+        const filter = prods.filter((e) => e.id !== id);
+        await fs.writeFile(this.path, JSON.stringify(filter, null, 2), "utf-8");
+        return { message: "Producto eliminado" };
+      } else {
+        return { error: "No encontrado" };
+      }
+    } catch (err) {
+      console.log(err);
     }
-
-    deleteProduct = (id) => {
-        let products = this.getProducts()
-        let objIndex = products.findIndex(obj => obj.id === id)
-        if (objIndex > -1) {
-            products[objIndex].status = false
-            products[objIndex].stock = 0;
-        } else {
-            console.log(id + ' No encontrado')
-        }
-
-        return products = fs.writeFileSync(this.path, JSON.stringify(products), 'utf-8')
-    }
+  }
 }
 
-export default ProductManager
+export default ProductManager;

@@ -6,6 +6,7 @@ import { __dirname } from "./utils.js";
 import { Server } from "socket.io";
 import ProductManager from "./src/mongoManager/ProductManager.js";
 import MsgsManager from "./src/mongoManager/MsgsManager.js";
+import CartManager from "./src/mongoManager/cartManager.js";
 import "./src/db/mongo.js";
 
 export const app = express();
@@ -13,10 +14,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/public"));
 
-const path = new ProductManager("./src/Dao/db/product.json");
+const path = new ProductManager("./src/mockDB/productos.json");
 const msgManager = new MsgsManager();
+const cartManager = new CartManager();
 
-// * Evita el error: ANOENT: main.hbs
+/* Evita el error: ANOENT: main.hbs
 app.engine(
   "hbs",
   handlebars.engine({
@@ -25,9 +27,10 @@ app.engine(
     layoutsDir: "views/layouts/",
   })
 );
-// *
-app.set("view engine", "hbs");
+*/
+app.engine('handlebars', handlebars.engine())
 app.set("views", __dirname + "/views");
+app.set("view engine", "handlebars");
 
 app.get("/", (req, res) => {
   res.render("home");
@@ -41,6 +44,11 @@ app.get("/chat", (req, res) => {
   res.render("chat");
 });
 
+app.get("/products", (req, res) => {
+    res.render("products");
+});
+
+  
 app.use("/api/carts", cartRouter);
 app.use("/api/products", prodRouter);
 
@@ -83,4 +91,13 @@ socketServer.on("connection", (socket) => {
     socket.emit("alert", sendMsg);
     socket.emit("msgs", getMsgs);
   });
+
+  socket.on('mongoProds', async () => {
+    const getPags = await path.getPagination(1, 10)
+    socket.emit('prods', getPags)
+  })
+
+  socket.on('addToCart', async (e) => {
+    await cartManager.addToCart('64120e7270a755ce7222be24', e._id)
+  })
 });

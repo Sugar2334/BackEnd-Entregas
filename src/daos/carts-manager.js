@@ -1,68 +1,103 @@
-import fs from 'fs'
-//const fs = require('fs')
-import ProductManager from '../daos/product-manager.js'
+import fs from "fs/promises";
 
-const products = new ProductManager('./src/mockDB/productos.json')
-products.getProducts()
+class CartManager {
+  constructor(path) {
+    this.path = path;
+  }
 
-class CartsManager {
-    constructor(ruta) {
-        this.path = ruta
+  async createCart() {
+    try {
+
+      const read = await fs.readFile(this.path, "utf-8");
+      const cart = JSON.parse(read);
+      const id = cart.length === 0 ? 0 : Number(cart[cart.length - 1].id) + 1;
+      cart.push({ id, products: [] });
+      await fs.writeFile(this.path, JSON.stringify(cart, null, 2), "utf-8");
+
+      return { message: `carrito creado con el id ${id}` }
+
+    } catch (err) {
+      console.log(err);
     }
+  }
 
-    getCarts = () => {
-        if (fs.existsSync(this.path)) {
-            let carts = []
-            return carts = JSON.parse(fs.readFileSync(this.path, 'utf-8'))
+  async deleteCart(id) {
+    try {
+
+      const read = await fs.readFile(this.path, "utf-8")
+      const cart = JSON.parse(read)
+      const deleted = cart.filter(e => e.id !== id)
+      return deleted
+      
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async getCart(id) {
+    try {
+
+      const read = await fs.readFile(this.path, "utf-8");
+      const carts = JSON.parse(read);
+      const search = carts.find((e) => e.id === id);
+      if (!!search) {
+        return search.products;
+      } else {
+        return { error: 'carrito inexistente' }
+      }
+
+
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async addToCart(cid, pid) {
+    try {
+      const read = await fs.readFile(this.path, "utf-8");
+      const cart = JSON.parse(read);
+      const search = cart.find((e) => e.id === Number(cid)); // buscar el carrito
+      if (!!search) {
+        const isHere = search.products.find((e) => e.product === Number(pid)); // buscar producto
+        if (!!isHere) {
+          isHere.quantity++;
+          await fs.writeFile(this.path, JSON.stringify(cart, null, 2), "utf-8"); 
+          return { message: 'Se han agregado más unidades al produco existente' }
         } else {
-            fs.writeFileSync(this.path, '[]', 'utf-8')
-            let carts = []
-            return carts
+          search.products.push({ product: Number(pid), quantity: 1 });
+          await fs.writeFile(this.path, JSON.stringify(cart, null, 2), "utf-8");
+          return { message: 'Se ha sumado el producto al carrito' }
         }
+      } else {
+        return { error: 'No se encuentra el carrito en la base de datos' }
+      }
+
+    } catch (err) {
+      console.log(err);
     }
-    
+  }
 
-    addCart = () => {
-        let carts = this.getCarts()
-        const cart = {
-            products: []
-        }
-
-
-        if (carts.length === 0) {
-            cart.id = 1
+  async removeFromCart(cid, pid) {
+    try {
+      const read = await fs.readFile(this.path, "utf-8");
+      const cart = JSON.parse(read);
+      let search = cart.find((e) => e.id === Number(cid)); // buscar el carrito
+      if (!!search) {
+        const isHere = search.products.find((e) => e.product === Number(pid)); // buscar producto
+        if (!!isHere) {
+          search.products.filter((e) => e.product !== pid);
+          await fs.writeFile(this.path, JSON.stringify(cart, null, 2), "utf-8");
+          return { message: 'Se ha eliminado el producto seleccionado' }
         } else {
-            cart.id = carts[carts.length - 1].id + 1
+          return { error: 'No se encuentra el producto en la base de datos' }
         }
-
-        carts.push(cart)
-        fs.writeFileSync(this.path, JSON.stringify(carts), 'utf-8')
-        
+      } else {
+        return { error: 'No se encuentra el carrito en la base de datos' }
+      }
+    } catch (err) {
+      console.log(err);
     }
-
-    addInCart = (cid, pid) => {
-        let prods = products.getProducts()
-        let carts = this.getCarts()
-
-        let searchedId = (prods.find(prod => prod.id === pid))
-        let cartFound = carts.find(crt => crt.id === parseInt(cid))
-        
-        if (!cartFound || !searchedId) {
-            console.log('Problema al tratar de resolver cid o pid')
-        } else {
-            const productIndex = cartFound.products.findIndex(prod => prod.id === pid)
-            if (productIndex === -1) {
-                cartFound.products.push({ id: pid, quantity: 1 })
-                fs.writeFileSync(this.path, JSON.stringify(carts), 'utf-8')
-            } else {
-                cartFound.products[productIndex].quantity += 1
-                fs.writeFileSync(this.path, JSON.stringify(carts), 'utf-8')
-            }
-            //cartFound[products].push(pid)
-            //cartFound[products].push(quantity)
-        }
-
-    }
+  }
 }
 
-export default CartsManager
+export default CartManager;

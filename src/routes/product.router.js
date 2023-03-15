@@ -7,24 +7,27 @@ const prod = new ProductManager();
 
 //  listar todos los prods
 prodRouter.get("/", async (req, res) => {
-  const { limit = 0 } = req.query; // '/products?limit=5'
-  const products = await prod.getProducts();
+  const { page, limit } = req.query;
+  const result = await prod.getPagination(page, limit);
+  const next = result.hasNextPage
+    ? `http://localhost:8080/api/products?page=${result.nextPage}`
+    : null;
+  const prev = result.hasPrevPage
+    ? `http://localhost:8080/api/products?page=${result.prevPage}`
+    : null;
+  res.json({
+    status: "sucess",
+    payload: result.docs,
+    totalPages: result.totalPages,
+    prevPage: result.prevPage,
+    nextPage: result.nextPage,
+    page: result.page,
+    hasPrevPage: result.hasPrevPage,
+    hasNextPage: result.hasNextPage,
+    prevLink: prev,
+    nextLink: next
 
-  if (limit === 0) {
-    if (products.length !== 0) {
-      res.json({ products });
-    } else {
-      res.send("No hay productos");
-    }
-  } else if (limit > products.length) {
-    res.json({ error: "Limit Exceeded" });
-  } else {
-    let arr = [];
-    products.map((e, i) => {
-      if (i < limit) arr.push(e);
-    });
-    res.json(arr);
-  }
+  });
 });
 
 // traer el prod seleccionado
