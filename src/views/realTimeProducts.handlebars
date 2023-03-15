@@ -1,35 +1,44 @@
-<div id="prod">
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-</div>
+    <link rel="stylesheet" href="/style.css">
 
+    <title>Document</title>
+  </head>
+  <body>
 
-<div>
-    <h2>Agregar producto</h2>
-    <form>
-        <label>Titulo</label>
-        <input type="text" name="title" id="title"  required>
-        <label>Descripcion</label>
-        <input name="description" id="description" required>
-        <label>Precio</label>
-        <input name="price" id="price" required>
-        <label>Imagen</label>
-        <input name="thumbnail" id="thumbnail" required>
-        <label>Codigo</label>
-        <input name="code" id="code" required>
-        <label>Stock</label>
-        <input name="stock" id="stock" required>
-        <button id="enviar">Enviar</button>
-        <input value="Limpiar campos" type="reset">
+    <h3>Agregar Productos</h3>
+      {{!-- form para agregar --}}
+    <form id="form">
+      Titulo:
+      <input type="text" id="title" required/>
+      Descripción:
+      <input type="text" id="desc" required/>
+      Precio:
+      <input type="number" id="price" required/>
+      Thumbnail/imagen descriptiva:
+      <input type="text" id="thumb" />
+      Código identificador:
+      <input type="text" id="code" required/>
+      Stock:
+      <input type="number" id="stock" required/>
+      <button type="submit">Enviar</button>
     </form>
-</div>
-
-<div>
-    <form>
-    <label for="id">ID del producto:</label>
-    <input type="text" name="id" id="id">
-    <button id="eliminar">Borrar producto</button>
+    <h3>Eliminar productos</h3>
+      {{!-- form para borrar --}}
+    <form id="formDelete">
+      <p>Cual producto desea eliminar?</p>
+      <input type="text" id="idField" required placeholder="id del producto" />
+      <button type="submit">Enviar</button>
     </form>
-</div>
+    <section id="prods">
+      {{! Prods a tiempo real }}
+    </section>
 
-<script src="/socket.io/socket.io.js"></script>
-<script src="/scripts/index.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/index.js"></script>
+  </body>
+</html>

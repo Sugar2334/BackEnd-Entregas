@@ -1,66 +1,86 @@
-import express from 'express'
-import productRouter from './src/routes/products.js'
-import cartRouter from './src/routes/cart.js'
-import homeRouter from './routes/home.js'
-import realTimeRouter from './routes/realTimeProducts.js'
-import __dirname from './utils.js'
-import ProductManager from './daos/product-manager.js'
-import { Server } from 'socket.io'
+import express from "express";
+import cartRouter from "./src/routes/cart.router.js";
+import prodRouter from "./src/routes/product.router.js";
+import handlebars from "express-handlebars";
+import { __dirname } from "./utils.js";
+import { Server } from "socket.io";
+import ProductManager from "./src/mongoManager/ProductManager.js";
+import MsgsManager from "./src/mongoManager/MsgsManager.js";
+import "./src/db/mongo.js";
 
+export const app = express();
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static(__dirname + "/public"));
 
+const path = new ProductManager("./src/Dao/db/product.json");
+const msgManager = new MsgsManager();
 
-const PORT = 8080
-const server = express()
-server.use(express.json())
-server.use(express.urlencoded({extended:true}))
+// * Evita el error: ANOENT: main.hbs
+app.engine(
+  "hbs",
+  handlebars.engine({
+    extname: "hbs",
+    defaultLayout: false,
+    layoutsDir: "views/layouts/",
+  })
+);
+// *
+app.set("view engine", "hbs");
+app.set("views", __dirname + "/views");
 
-server.use(express.static(`${__dirname}/public`))
+app.get("/", (req, res) => {
+  res.render("home");
+});
 
-server.engine('handlebars', handlebars.engine())
-server.set('views', __dirname+'/views')
-server.set('view engine', 'handlebars')
+app.get("/realtimeproducts", (req, res) => {
+  res.render("realTimeProducts");
+});
 
-server.use('/', homeRouter)
+app.get("/chat", (req, res) => {
+  res.render("chat");
+});
 
-server.use('/', realTimeRouter)
+app.use("/api/carts", cartRouter);
+app.use("/api/products", prodRouter);
 
-server.use('/api/products', productRouter)
+export const serverLocal = app.listen("8080", () => {
+  console.log("200 OK");
+});
 
-server.use('/api/carts', cartRouter)
+const socketServer = new Server(serverLocal);
 
-const httpServer = server.listen(PORT, err =>{
-    if (err)  console.log(err)
-    console.log(`Corriendo en http://localhost:${PORT}`)
-})
+socketServer.on("connection", (socket) => {
+  console.log(`Usuario conectado ${socket.id}`);
 
-const socketServer = new Server(httpServer)
+  socket.on("showProds", async () => {
+    const prods = await path.getProducts();
+    socket.emit('prods', prods)
+  });
 
-const productManager = new ProductManager(__dirname + '/mockDB/productos.json')
-let history = productManager.getProducts()
+  socket.on('showMsg', async () => {
+    const getMsgs = await msgManager.getMsgs();
+    socket.emit("msgs", getMsgs);
+  })
 
-socketServer.on('connection', socket => {
-    console.log('Cliente conectado')
+  socket.on("send", async (e) => {
+    const posted = await path.addProduct(e);
+    const prods = await path.getProducts();
+    socket.emit("alert", posted);
+    socket.emit("prods", prods);
+  });
 
-    socket.emit('arrayProd', history)
+  socket.on("delete", async (e) => {
+    const deleted = await path.deleteProduct(e);
+    const prods = await path.getProducts();
+    socket.emit("alert", deleted);
+    socket.emit("prods", prods);
+  });
 
-    socket.on('newProduct', (data) => {
-        const {title, description, price, thumbnail, code, stock} = data
-        productManager.addProduct(title, description, price, thumbnail, code, stock)
-        history = productManager.getProducts()
-        socket.emit('arrayProd', history)
-    })
-
-    socket.on('delProduct', (data) => {
-        const { id } = data
-        productManager.deleteProduct(id)
-        history = productManager.getProducts()
-        socket.emit('arrayProd', history)
-    })
-})
-
-
-/* Otra forma de escuchar al servidor
-server.listen(PORT, err =>{
-    if (err)  console.log(err)
-    console.log(`Corriendo en http://localhost:${PORT}`)
-})*/
+  socket.on("msg", async (e) => {
+    const sendMsg = await msgManager.sendMsg(e);
+    const getMsgs = await msgManager.getMsgs();
+    socket.emit("alert", sendMsg);
+    socket.emit("msgs", getMsgs);
+  });
+});

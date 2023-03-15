@@ -34,3 +34,15 @@ button {
     border-radius: 10px;
     line-height: 1.8;
 }
+#chat {
+  margin-top: 20px;
+}
+#chat div {
+  background-color: #333;
+  color: #FFF;
+  width: 250px;
+  padding: 5px;
+  border-radius: 5px;
+  margin: 0 auto;
+  margin-bottom: 5px;
+}

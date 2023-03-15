@@ -1,9 +1,17 @@
-<div>
-    <div>
-        <h2>Productos:</h2>
-        {{#each products}}
-            <h4>{{this.title}}</h4>
-            <p>Precio: ${{this.price}}</p>
-        {{/each}}
-    </div>
-</div>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css">
+    <title>Products</title>
+  </head>
+  <body>
+    <h3>Productos</h3>
+    <section id="prods">
+      {{! Prods hasta el momento }}
+    </section>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/index.js"></script>
+  </body>
+</html>
