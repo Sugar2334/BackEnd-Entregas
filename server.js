@@ -14,23 +14,22 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/public"));
 
-const path = new ProductManager("./src/mockDB/productos.json");
+const path = new ProductManager();
 const msgManager = new MsgsManager();
 const cartManager = new CartManager();
 
-/* Evita el error: ANOENT: main.hbs
+// * Evita el error: ANOENT: main.hbs
 app.engine(
   "hbs",
   handlebars.engine({
     extname: "hbs",
     defaultLayout: false,
-    layoutsDir: "views/layouts/",
+    layoutsDir: "./src/layouts/",
   })
 );
-*/
-app.engine('handlebars', handlebars.engine())
-app.set("views", __dirname + "/views");
-app.set("view engine", "handlebars");
+// *
+app.set("view engine", "hbs");
+app.set("views", __dirname + "/src/views")
 
 app.get("/", (req, res) => {
   res.render("home");

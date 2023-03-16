@@ -48,7 +48,7 @@ form.onsubmit = (e) => {
     thumbnail: thumb.value,
     code: code.value,
     stock: stock.value,
-    category: "hola",
+    category: "ABC",
   };
   title.value = "";
   desc.value = "";
