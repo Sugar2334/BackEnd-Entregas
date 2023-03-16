@@ -18,7 +18,7 @@ const path = new ProductManager();
 const msgManager = new MsgsManager();
 const cartManager = new CartManager();
 
-// * Evita el error: ANOENT: main.hbs
+// * Evita el error: ANOENT: main.hbs //
 app.engine(
   "hbs",
   handlebars.engine({
