@@ -1,24 +1,45 @@
-<!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <title>Document</title>
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/style.css" />
+    <title>Productos</title>
+  </head>
+  <body class="body-login">
+
+    {{#if user}}
+      <header>
+        <nav class="navbar-prod">
+          <img class="profileImg" src="{{user.photo}}" alt="foto de perfil" />
+          <h3>Bienvenido {{user.first_name}}</h3>
+          <div class="actions">
+            <a
+              href="http://127.0.0.1:8080/cart/{{user.cart}}"
+              class="carrito"
+            >Ir al carrito</a>
+            <a href="/login" class="logout">Logout</a>
+          </div>
+        </nav>
+      </header>
+    {{/if}}
 
     <main>
 
-        <h2>Nuestros Productos:</h2>
-        <section id="prods">
-            {{!-- Aca se encuentran los productos --}}
-        </section>
+      {{#if user}}
+        <div class="data">
+          <p>El id de usuario es: <span id="idUSer">{{user._id}}</span></p>
+          <p>El id de tu carrito es: <span id="idCart">{{user.cart}}</span></p>
+        </div>
+      {{/if}}
+      <h2>Nuestros Productos:</h2>
+      <section id="prods">
+        {{! Aca se encuentran los productos }}
+      </section>
 
     </main>
 
     <script src="/socket.io/socket.io.js"></script>
-    <script src="products.js"></script>
-</body>
+    <script src="/products.js"></script>
+  </body>
 </html>

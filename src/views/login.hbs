@@ -1,0 +1,63 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/style.css" />
+    <title>Login</title>
+  </head>
+  <body class="body-login">
+
+    <div class="wrapper">
+      <div class="form-box login">
+        <h2>Login</h2>
+        <form id="loginForm" action="/login" method="post">
+          <div class="input-box">
+            <span class="icon"></span>
+            <input type="text" name="email" id="user" required>
+            <label>Email</label>
+          </div>
+          <div class="input-box">
+            <span class="icon"></span>
+            <input type="password" name="password" id="pass" required>
+            <label>Password</label>
+          </div>
+          <div class="remember-forgot">
+            <label><input type="checkbox">
+            Remember me</label>
+            <a href="#">Forgot Password?</a>
+          </div>
+          <button type="submit" class="btn">Login</button>
+          <div class="login-register">
+            <p>No tiene una cuenta?<a href="/signUp" class="register-link">Register</a></p>
+            <p class="register-p">Tambien puedes ingresar con</p>
+            <a href="/login/github">GitHub.</a>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    </main>
+
+  </body>
+</html>
+
+
+
+ {{!-- <main class="main-login">
+      <h2>Acceso</h2>
+      <form id="loginForm" action="/login" method="post">
+        <p>Email:</p>
+        <input type="text" name="email" id="user" required />
+        <p>Contraseña:</p>
+        <input type="password" name="password" id="pass" required />
+        <div><button type="submit" class="input-enviar">Enviar</button></div>
+      </form>
+
+      <div class="p-register">
+        <p class="register-p">Si no estas registrado/a haz</p>
+        <a href="/signUp"> Click aqui.</a>
+
+        <p class="register-p">Tambien puedes ingresar con</p>
+        <a href="/login/github">GitHub.</a>
+      </div> --}}

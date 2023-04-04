@@ -1,0 +1,26 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/style.css" />
+    <title>Carrito</title>
+  </head>
+  <body class="body-cart">
+    <main class="main-carrito">
+      <h1 class="h1-carrito">Carrito</h1>
+      <section class="cart">
+
+        {{#each cart.products}}
+          <div class="prodCart">
+            <p class="p-carrito">{{_id.title}}</p>
+            <p class="p-carrito">{{_id.description}}</p>
+            <p class="p-carrito">${{_id.price}}</p>
+            <p class="p-carrito">Cantidad: {{quantity}}</p>
+          </div>
+        {{/each}}
+      </section>
+
+    </main>
+  </body>
+</html>

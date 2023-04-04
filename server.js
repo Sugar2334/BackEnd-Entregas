@@ -1,18 +1,55 @@
 import express from "express";
-import cartRouter from "./src/routes/cart.router.js";
+import apiCartRouter from "./src/routes/cart.router.js";
+import apiSessionsRouter from "./src/routes/apiSession.router.js"
 import prodRouter from "./src/routes/product.router.js";
 import handlebars from "express-handlebars";
-import { __dirname } from "./utils.js";
+import cookieParser from "cookie-parser";
+import cookieRouter from "./src/routes/cookie.router.js";
+import sessionRouter from "./src/routes/session.router.js"
+import jwtRouter from "./src/routes/jwt.router.js";
+import views from "./src/routes/views.router.js";
+import session from "express-session";
+import FileStore from "session-file-store";
+import mongoStore from "connect-mongo"
+import passport from "passport";
+import cors from 'cors'
+import { __dirname } from "./src/utils.js";
 import { Server } from "socket.io";
 import ProductManager from "./src/mongoManager/ProductManager.js";
 import MsgsManager from "./src/mongoManager/MsgsManager.js";
-import CartManager from "./src/mongoManager/cartManager.js";
+import CartManager from "./src/mongoManager/CartManager.js";
 import "./src/db/mongo.js";
 
+
+
+
 export const app = express();
+const cookieKey = "SignedCookieKey";
+const PORT = process.env.PORT
+
+
+app.use(cors())
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/public"));
+app.use(cookieParser(cookieKey));
+app.use(passport.initialize())
+
+
+const fileStore = FileStore(session)
+app.use(
+  session({
+    secret: "secretCode",
+    resave: false,
+    saveUninitialized: true,
+    // cookie: { maxAge: 50000 },
+    store: new mongoStore({
+      mongoUrl: 'mongodb+srv://ManuelTorrico16:Manu1605@proyectos-coderhouse.sxzos9y.mongodb.net/productos?retryWrites=true&w=majority'
+    })
+  })
+);
+
+app.use(passport.session())
 
 const path = new ProductManager();
 const msgManager = new MsgsManager();
@@ -29,27 +66,19 @@ app.engine(
 );
 // *
 app.set("view engine", "hbs");
-app.set("views", __dirname + "/src/views")
+app.set("views", __dirname + "/views")
 
-app.get("/", (req, res) => {
-  res.render("home");
-});
+// views
+app.use("/", views);
 
-app.get("/realtimeproducts", (req, res) => {
-  res.render("realTimeProducts");
-});
+app.use('/', sessionRouter)
+app.use("/cookies", cookieRouter);
+app.use('/jwt', jwtRouter)
 
-app.get("/chat", (req, res) => {
-  res.render("chat");
-});
-
-app.get("/products", (req, res) => {
-    res.render("products");
-});
-
-  
-app.use("/api/carts", cartRouter);
+// app.use("/cart", cartRouter)
+app.use("/api/carts", apiCartRouter);
 app.use("/api/products", prodRouter);
+app.use('/api/sessions', apiSessionsRouter)
 
 export const serverLocal = app.listen("8080", () => {
   console.log("200 OK");
@@ -96,7 +125,8 @@ socketServer.on("connection", (socket) => {
     socket.emit('prods', getPags)
   })
 
-  socket.on('addToCart', async (e) => {
-    await cartManager.addToCart('64120e7270a755ce7222be24', e._id)
-  })
+  socket.on("addToCart", async (e) => {
+    const cart = await cartManager.addToCart(e.idCart, e.obj._id);
+    socket.emit("alert", cart);
+  });
 });
