@@ -1,57 +1,40 @@
 import { Router } from "express";
-import CartManager from "../mongoManager/CartManager.js";
+import { isUser } from '../middlewares/role.middleware.js'
+import {
+  addToCart,
+  createCart,
+  emptyCart,
+  getCart,
+  purchaseCart,
+  removeFromCart,
+  replaceCart,
+  sumQuantity,
+} from "../controllers/cart.controller.js";
 
-const apicartRouter = new Router();
-const newCart = new CartManager();
+const router = new Router();
 
 // Nuevo carrito
-apicartRouter.post("/", async (req, res) => {
-  const result = await newCart.createCart();
-  res.json(result);
-});
+router.post("/", isUser, createCart);
 
 // Listar prods
-apicartRouter.get("/:cid", async (req, res) => {
-  const id = req.params;
-  const cart = await newCart.getCart(id.cid);
-  res.json(cart);
-});
+router.get("/:cid", isUser, getCart);
 
-// * actuliza el carrito por el array del body
-apicartRouter.put("/:cid", async (req, res) => {
-  const params = req.params;
-  const result = await newCart.replaceCart(params.cid, req.body)
-  res.json(result);
-});
+// Actuliza el carrito por el array del body
+router.put("/:cid", isUser, replaceCart);
 
 // Elimina todo el array
-apicartRouter.delete("/:cid", async (req, res) => {
-  const params = req.params;
-  const result = await newCart.emptyCart(params.cid);
-  res.json(result);
-});
+router.delete("/:cid", isUser, emptyCart);
+
+// Elimina todo el array
+router.delete("/:cid/purchase", isUser, purchaseCart);
 
 // Agregar prod al arr de prods dentro del carrito seleccionado
-apicartRouter.post("/:cid/product/:pid", async (req, res) => {
-  const params = req.params;
-  const result = await newCart.addToCart(params.cid, params.pid);
-  res.json(result);
-});
+router.post("/:cid/product/:pid", isUser, addToCart);
+
+// Actualiza la quantity
+router.put("/:cid/product/:pid", isUser, sumQuantity);
 
 // Eliminar prods del array del carrito
-apicartRouter.delete("/:cid/product/:pid", async (req, res) => {
-  const params = req.params;
-  const result = await newCart.removeFromCart(params.cid, params.pid);
-  res.json(result);
-});
+router.delete("/:cid/product/:pid", isUser, removeFromCart);
 
-// * actualiza la quantity
-apicartRouter.put("/:cid/product/:pid", async (req, res) => {
-  const params = req.params;
-  const { quantity } = req.body
-  const result = await newCart.removeFromCart(params.cid, params.pid);
-  res.json(result);
-});
-
-
-export default apicartRouter;
+export default router;

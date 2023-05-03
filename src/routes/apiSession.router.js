@@ -1,11 +1,8 @@
 import { Router } from "express";
-import session from "express-session";
+import { getCurrent } from "../controllers/user.controller.js";
 
-const apiSessionsRouter = Router()
+const router = Router()
 
-apiSessionsRouter.get('/current', (req, res) => {
-    const user = req.session
-    res.json(user)
-})
+router.get('/current', getCurrent)
 
-export default apiSessionsRouter
+export default router

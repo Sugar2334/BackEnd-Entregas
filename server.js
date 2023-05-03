@@ -19,6 +19,7 @@ import ProductManager from "./src/mongoManager/ProductManager.js";
 import MsgsManager from "./src/mongoManager/MsgsManager.js";
 import CartManager from "./src/mongoManager/CartManager.js";
 import "./src/db/mongo.js";
+import config from "./config/config.js";
 
 
 
@@ -44,7 +45,7 @@ app.use(
     saveUninitialized: true,
     // cookie: { maxAge: 50000 },
     store: new mongoStore({
-      mongoUrl: 'mongodb+srv://ManuelTorrico16:Manu1605@proyectos-coderhouse.sxzos9y.mongodb.net/productos?retryWrites=true&w=majority'
+      mongoUrl: config.mongoUrl
     })
   })
 );
