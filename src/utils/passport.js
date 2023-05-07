@@ -3,7 +3,7 @@ import { Strategy as LocalStrategy } from "passport-local";
 import { Strategy as GithubStrategy } from "passport-github2";
 import { userModel } from "../models/users.model.js";
 import { cartModel } from "../models/carts.model.js";
-import { hashPassword } from "../../utils.js";
+import { hashPassword } from "../utils.js";
 //import "dotenv/config";//
 
 passport.use(
