@@ -16,7 +16,6 @@ socketClient.on('alert', (e) => {
   }
 })
 
-
 const render = (e) => {
   e.docs.forEach((elem) => {
     const div = document.createElement("div");

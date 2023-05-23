@@ -4,14 +4,17 @@ import apiSessionsRouter from "./src/routes/apiSession.router.js"
 import prodRouter from "./src/routes/product.router.js";
 import handlebars from "express-handlebars";
 import cookieParser from "cookie-parser";
+import loggerTest from "./src/routes/test.router.js";
 import cookieRouter from "./src/routes/cookie.router.js";
 import sessionRouter from "./src/routes/session.router.js"
 import jwtRouter from "./src/routes/jwt.router.js";
 import views from "./src/routes/views.router.js";
 import session from "express-session";
+import { serve, setup } from 'swagger-ui-express'
 import FileStore from "session-file-store";
 import mongoStore from "connect-mongo"
 import passport from "passport";
+import swaggerSpec from './src/config/swaggerConfig.js'
 import cors from 'cors'
 import { __dirname } from "./src/utils.js";
 import { Server } from "socket.io";
@@ -69,6 +72,8 @@ app.engine(
 app.set("view engine", "hbs");
 app.set("views", __dirname + "/views")
 
+app.use('/apidocs', serve, setup(swaggerSpec))
+
 // views
 app.use("/", views);
 
@@ -80,6 +85,7 @@ app.use('/jwt', jwtRouter)
 app.use("/api/carts", apiCartRouter);
 app.use("/api/products", prodRouter);
 app.use('/api/sessions', apiSessionsRouter)
+app.use("/api/test", loggerTest);
 
 export const serverLocal = app.listen("8080", () => {
   console.log("200 OK");
