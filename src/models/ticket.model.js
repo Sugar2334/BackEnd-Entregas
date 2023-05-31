@@ -20,4 +20,4 @@ const ticketSchema = new mongoose.Schema({
     }
 })
 
-export const ticketModel = mongoose.model('messages', ticketSchema)
+export const ticketModel = mongoose.model('tickets', ticketSchema)

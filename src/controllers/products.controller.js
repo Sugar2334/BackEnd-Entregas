@@ -2,7 +2,6 @@ import ProductManager from "../mongoManager/ProductManager.js";
 import { faker } from "@faker-js/faker";
 import { logger } from "../utils/logger.js";
 
-
 const prod = new ProductManager();
 
 export const getProds = async (req, res) => {

@@ -17,4 +17,3 @@
     "required": ["code", "purchase_datetime", "amount", "purchaser"],
     "uniqueItems": true
   }
-  

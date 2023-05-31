@@ -50,6 +50,53 @@ class UserManager {
       console.log(err);
     }
   }
+
+  async checkByEmail(email) {
+    try {
+      const user = await userModel.find({ email })
+      return user[0]
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async changePassword(userId, newPassword) {
+    try {
+      // Obtener el usuario de la base de datos
+      const user = await userModel.findById(userId);
+      if (!user) {
+        throw new Error('Usuario no encontrado');
+      }
+  
+      // Actualizar la contraseña del usuario
+      const hashedPassword = await hashPassword(newPassword);
+      user.password = hashedPassword;
+      await user.save();
+  
+      return user;
+    } catch (error) {
+      console.error('Error al cambiar la contraseña:', error);
+      throw error;
+    }
+  }
+
+  async changeUserRole(userId) {
+    try {
+      const user = await userModel.findById(userId);
+      if (!user) {
+        throw new Error('Usuario no encontrado');
+      }
+
+      const newRole = user.role === 'user' ? 'premium' : 'user';
+      user.role = newRole;
+      await user.save();
+
+      return user;
+    } catch (error) {
+      console.error('Error al cambiar el rol del usuario:', error);
+      throw error;
+    }
+  }
 }
 
 export default UserManager;

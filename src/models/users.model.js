@@ -24,8 +24,8 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    required: true,
-    default: 'user'
+    enum: ["user", "premium", "admin"],
+    default: "user",
   },
   photo: {
     type: String,
@@ -39,8 +39,10 @@ const userSchema = new mongoose.Schema({
   cart: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "products",
-    default: [],
   },
+  userToken: {
+    type: String
+  }
 });
 
 export const userModel = mongoose.model("users", userSchema);

@@ -11,9 +11,14 @@ class ProductManager {
     }
   }
 
-  async getPagination(page = 1, limit = 10, sort = undefined, query = {}) {
+  async getPagination(query, limit = 10, page = 1, value = undefined ) {
     try {
-      const pags = await productModel.paginate(query, { limit, page, sort })
+      const options = {
+        sort: { price: value },
+        limit,
+        page
+      }
+      const pags = await productModel.paginate({query}, options)
       return pags
     } catch (err) {
       console.log(err);
@@ -38,6 +43,15 @@ class ProductManager {
     }
   }
 
+  async getProductByUserId(id) {
+    try {
+      const products = await productModel.find({ owner: id });
+      return products;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   async updateProduct(id, field, elem) {
     try {
       const update = await productModel.findOneAndUpdate(id, { $set: { [field]: elem } });
@@ -50,7 +64,7 @@ class ProductManager {
   async deleteProduct(id) {
     try {
       const deleted = await productModel.findByIdAndDelete(id);
-      return deleted;
+      return { message: 'Producto eliminado', prod: deleted };
     } catch (err) {
       console.log(err);
     }

@@ -1,29 +1,30 @@
-import express from "express";
 import apiCartRouter from "./src/routes/cart.router.js";
-import apiSessionsRouter from "./src/routes/apiSession.router.js"
 import prodRouter from "./src/routes/product.router.js";
-import handlebars from "express-handlebars";
-import cookieParser from "cookie-parser";
-import loggerTest from "./src/routes/test.router.js";
-import cookieRouter from "./src/routes/cookie.router.js";
+import apiSessionsRouter from "./src/routes/apiSession.router.js"
 import sessionRouter from "./src/routes/session.router.js"
-import jwtRouter from "./src/routes/jwt.router.js";
 import views from "./src/routes/views.router.js";
-import session from "express-session";
-import { serve, setup } from 'swagger-ui-express'
-import FileStore from "session-file-store";
-import mongoStore from "connect-mongo"
-import passport from "passport";
-import swaggerSpec from './src/config/swaggerConfig.js'
-import cors from 'cors'
-import { __dirname } from "./src/utils.js";
-import { Server } from "socket.io";
+import loggerTest from "./src/routes/test.router.js";
 import ProductManager from "./src/mongoManager/ProductManager.js";
 import MsgsManager from "./src/mongoManager/MsgsManager.js";
 import CartManager from "./src/mongoManager/CartManager.js";
+import { serve, setup } from 'swagger-ui-express'
+import express from "express";
+import handlebars from "express-handlebars";
+import cookieParser from "cookie-parser";
+import session from "express-session";
+import FileStore from "session-file-store";
+import mongoStore from "connect-mongo"
+import passport from "passport";
+import cors from 'cors'
+import swaggerSpec from './src/config/swaggerConfig.js'
+import { __dirname } from "./src/utils.js";
+import { Server } from "socket.io";
+import cookieRouter from "./src/routes/cookie.router.js";
+import jwtRouter from "./src/routes/jwt.router.js";
 import "./src/db/mongo.js";
-import config from "./config/config.js";
-
+import "./src/config/dbConfig.js";
+import "./src/utils/passport.js";
+import config from "./src/config/config.js";
 
 
 
@@ -87,7 +88,7 @@ app.use("/api/products", prodRouter);
 app.use('/api/sessions', apiSessionsRouter)
 app.use("/api/test", loggerTest);
 
-export const serverLocal = app.listen("8080", () => {
+export const serverLocal = app.listen(PORT, () => {
   console.log("200 OK");
 });
 
