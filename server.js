@@ -130,7 +130,7 @@ socketServer.on("connection", (socket) => {
   });
 
   socket.on('mongoProds', async () => {
-    const getPags = await path.getPagination(1, 10)
+    const getPags = await path.getPagination()
     socket.emit('prods', getPags)
   })
 
