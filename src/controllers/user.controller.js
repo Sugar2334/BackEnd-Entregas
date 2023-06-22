@@ -72,15 +72,15 @@ let transporter = nodemailer.createTransport({
     pass: config.nodemailerPass, // generated ethereal password
   },
 });
-// Esto forma parte de la entrega de la Clase 37
+
 export const requestPasswordReset = async (req, res) => {
   const { email } = req.body;
   const user = await userManager.checkByEmail(email);
+  const resetToken = generateToken(user);
 
   try {
     if (user) {
       // Generar token único y aleatorio
-      const resetToken = generateToken(user);
       user.resetToken = resetToken;
       await user.save();
     } else {
@@ -191,3 +191,17 @@ export const changeRole = async (req, res) => {
     res.status(500).json({ message: 'Error al actualizar el rol de usuario' });
   }
 };
+
+export const getUsersInfo = async (req, res) => {
+  users = await userManager.getUserInfo()
+  res.json(users)
+}
+
+export const deleteInactiveUsers = async (req, res) => {
+  try {
+    await MongoManager.deleteInactiveUsers();
+    res.status(200).json({ message: 'Usuarios inactivos eliminados y correos enviados correctamente' });
+  } catch (err) {
+    res.status(500).json({ error: 'Error al eliminar usuarios inactivos' });
+  }
+}

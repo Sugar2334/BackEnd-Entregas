@@ -27,7 +27,7 @@ const render = (e) => {
     price.innerHTML = `$${elem.price}`
     btn.innerText = "Agregar al carrito"
     btn.addEventListener('click', () => {
-      socketClient.emit('addToCart', elem)
+      socketClient.emit('addToCart', { obj: elem, idCart: idCart })
     })
     div.appendChild(title)
     div.appendChild(price)

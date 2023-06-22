@@ -1,6 +1,7 @@
 import { cartModel } from "../models/carts.model.js";
 import { ticketModel } from "../models/ticket.model.js";
-import { errors } from "../utils/errors.js"
+import { errors } from "../utils/errors.js";
+import { v4 as uuidv4 } from 'uuid';
 
 class CartManager {
   async createCart() {
@@ -31,7 +32,6 @@ class CartManager {
         .findById(id)
         .populate({ path: "products._id" })
         .lean();
-      console.log(getCart);
       return getCart;
     } catch (err) {
       console.log(err);
@@ -151,7 +151,7 @@ class CartManager {
       }
 
       const ticket = await ticketModel.create({
-        code: "ABC" + Math.random() * 2,
+        code: uuidv4(),
         purchase_datetime: new Date(),
         amount: 1,
         purchaser: cid,

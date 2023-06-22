@@ -33,9 +33,9 @@ views.get("/products/:id", async (req, res) => {
 res.render("products", { user: await userManager.checkUser(req.params.id) });
 });
 
-views.get('/cart/:id/purchase', async (req, res) => {
-res.render('purchase')
-})
+//views.get('/cart/:id/purchase', async (req, res) => {
+//res.render('purchase')
+//})
 
 // render desde session.router.js para borrar la cookie
 // views.get("/login", (req, res) => {

@@ -63,6 +63,6 @@ form.onsubmit = (e) => {
 
 formDelete.onsubmit = (e) => {
   e.preventDefault();
-  socketClient.emit("delete", Number(id.value));
+  socketClient.emit("delete", id.value);
   id.value = "";
 };

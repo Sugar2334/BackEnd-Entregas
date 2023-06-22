@@ -44,8 +44,8 @@ export const checkOwner = async (req, res, next) => {
     }
 
     // Verificar si el usuario es propietario del producto
-    if (product.owner === userId) {
-      return next(); // Permiso concedido para el propietario del producto
+    if (product.owner === owner) {
+      return next();
     }
 
     // Si no se cumple ninguna de las condiciones anteriores, el usuario no tiene permiso

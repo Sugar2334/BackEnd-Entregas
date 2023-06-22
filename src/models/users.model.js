@@ -42,7 +42,19 @@ const userSchema = new mongoose.Schema({
   },
   userToken: {
     type: String
-  }
+  },
+  documents: [
+    {
+      name: {
+        type: String,
+        required: true,
+      },
+      reference: {
+        type: String,
+        required: true,
+      },
+    },
+  ],
 });
 
 export const userModel = mongoose.model("users", userSchema);

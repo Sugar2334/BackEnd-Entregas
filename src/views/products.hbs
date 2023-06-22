@@ -30,6 +30,12 @@
         <div class="data">
           <p>El id de usuario es: <span id="idUSer">{{user._id}}</span></p>
           <p>El id de tu carrito es: <span id="idCart">{{user.cart}}</span></p>
+          <br>
+          <form method="post">
+            <p>Subir archivos:</p>
+          <input type="file"></input>
+          <button type="submit">Enviar</button>
+          </form>
         </div>
       {{/if}}
       <h2>Nuestros Productos:</h2>

@@ -1,7 +1,7 @@
 import CartManager from '../mongoManager/CartManager.js'
 import { logger } from "../utils/logger.js";
 
-const cart = new CartManager()
+const cart = new CartManager();
 
 export const createCart = async (req, res) => {
   try {
@@ -16,7 +16,6 @@ export const createCart = async (req, res) => {
 export const getCart = async (req, res) => {
   try {
     const id = req.params.cid;
-    console.log(id);
     const myCart = await cart.getCart(id);
     res.json(myCart);
   } catch (error) {
@@ -92,9 +91,9 @@ export const sumQuantity = async (req, res) => {
 
 export const purchaseCart = async (req, res) => {
   try {
-    const params = req.params;
-    const result = await cart.purchase(params.cid);
-    res.json(result);
+    const { cid } = req.params;
+    const ticket = await cart.purchase(cid);
+    res.render('done', { ticket: ticket })
   } catch (error) {
     logger.error("Error al realizar la compra:", error);
     res.status(500).json({ error: "Error al realizar la compra" });
