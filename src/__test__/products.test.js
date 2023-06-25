@@ -16,6 +16,7 @@ before(async () => {
   await wait2Secs();
 });
 
+// [GET] /api/products
 describe("Product Controller", () => {
   describe("GET /api/products", () => {
     it("should return a list of products", async () => {
@@ -24,52 +25,52 @@ describe("Product Controller", () => {
       expect(res.body).to.have.property("status");
       expect(res.body).to.have.property("payload").to.be.an("array");
     });
-
+    // [GET] /api/products/:id
     it("should return a specific product by ID", async () => {
       const productId = "641e6c29a9b1fb0f8bf81078";
       const res = await request(serverLocal).get(`/api/products/${productId}`);
       expect(res.status).to.equal(200);
       expect(res.body).to.have.property("title");
       expect(res.body).to.have.property("price");
-    });
-    
+  });    
+});
+
+
+describe("POST /api/products", () => {
+     it("should add a new product", async () => {
+       const productData = { title: "Mango", description: 'algo', price: 10.99, code: 'AA12', stock: 1, category: 'test' }; // Datos del nuevo producto
+       const session = { id: "1", role: 'admin', email: 'test@gmail' }
+       const res = await request(serverLocal)
+         .post("/api/products")
+         .send(productData);
+       expect(res.status).to.equal(200);
+     });
+   });
+
+   describe("PUT /api/products/:id", () => {
+     it("should update a product", async () => {
+       const productId = "641e6c29a9b1fb0f8bf81078";
+       const updatedData = { title: "Mango", price: 19.99 }; // Datos actualizados del producto
+       const res = await request(serverLocal)
+         .put(`/api/products/${productId}`)
+         .send(updatedData);
+       expect(res.status).to.equal(200);
+       expect(res.body).to.have.property("name", updatedData.title);
+       expect(res.body).to.have.property("price", updatedData.price);
+     });
+   });
+
+   describe("DELETE /api/products/:id", () => {
+     it("should delete a product", async () => {
+       const productId = "641e6c29a9b1fb0f8bf81078";
+       const res = await request(serverLocal).delete(
+         `/api/products/${productId}`
+       );
+       expect(res.status).to.equal(200);
+       expect(res.body).to.have.property("message", "Producto eliminado");
+       expect(res.body).to.have.property("prod");
+     });
   });
-
-//   describe("POST /api/products", () => {
-//     it("should add a new product", async () => {
-//       const productData = { title: "Mango", description: 'algo', price: 10.99, code: 'AA12', stock: 1, category: 'test' }; // Datos del nuevo producto
-//       const session = { id: "1", role: 'admin', email: 'test@gmail' }
-//       const res = await request(serverLocal)
-//         .post("/api/products")
-//         .send(productData);
-//       expect(res.status).to.equal(200);
-//     });
-//   });
-
-//   describe("PUT /api/products/:id", () => {
-//     it("should update a product", async () => {
-//       const productId = "641e6c29a9b1fb0f8bf81078";
-//       const updatedData = { title: "Mango", price: 19.99 }; // Datos actualizados del producto
-//       const res = await request(serverLocal)
-//         .put(`/api/products/${productId}`)
-//         .send(updatedData);
-//       expect(res.status).to.equal(200);
-//       expect(res.body).to.have.property("name", updatedData.title);
-//       expect(res.body).to.have.property("price", updatedData.price);
-//     });
-//   });
-
-//   describe("DELETE /api/products/:id", () => {
-//     it("should delete a product", async () => {
-//       const productId = "641e6c29a9b1fb0f8bf81078";
-//       const res = await request(serverLocal).delete(
-//         `/api/products/${productId}`
-//       );
-//       expect(res.status).to.equal(200);
-//       expect(res.body).to.have.property("message", "Producto eliminado");
-//       expect(res.body).to.have.property("prod");
-//     });
-//   });
 });
 
 after(() => {
