@@ -48,11 +48,11 @@ export const emptyCart = async (req, res) => {
 
 export const addToCart = async (req, res) => {
   try {
-    // Obtener el ID del usuario autenticado
+    
     const { cid, pid } = req.params;
     const uid = req.user.id;
 
-    // Verificar si el usuario ya ha creado el producto
+    
     const existingProduct = await prod.getProductByUserId(uid)
     if (existingProduct) {
       return res.status(400).json({ message: "El usuario ya ha creado este producto" });

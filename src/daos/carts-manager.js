@@ -56,9 +56,9 @@ class CartManager {
     try {
       const read = await fs.readFile(this.path, "utf-8");
       const cart = JSON.parse(read);
-      const search = cart.find((e) => e.id === Number(cid)); // buscar el carrito
+      const search = cart.find((e) => e.id === Number(cid)); 
       if (!!search) {
-        const isHere = search.products.find((e) => e.product === Number(pid)); // buscar producto
+        const isHere = search.products.find((e) => e.product === Number(pid)); 
         if (!!isHere) {
           isHere.quantity++;
           await fs.writeFile(this.path, JSON.stringify(cart, null, 2), "utf-8"); 
@@ -81,9 +81,9 @@ class CartManager {
     try {
       const read = await fs.readFile(this.path, "utf-8");
       const cart = JSON.parse(read);
-      let search = cart.find((e) => e.id === Number(cid)); // buscar el carrito
+      let search = cart.find((e) => e.id === Number(cid));
       if (!!search) {
-        const isHere = search.products.find((e) => e.product === Number(pid)); // buscar producto
+        const isHere = search.products.find((e) => e.product === Number(pid));
         if (!!isHere) {
           search.products.filter((e) => e.product !== pid);
           await fs.writeFile(this.path, JSON.stringify(cart, null, 2), "utf-8");

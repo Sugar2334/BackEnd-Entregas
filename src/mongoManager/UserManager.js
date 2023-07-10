@@ -68,13 +68,13 @@ class UserManager {
 
   async changePassword(userId, newPassword) {
     try {
-      // Obtener el usuario de la base de datos
+      
       const user = await userModel.findById(userId);
       if (!user) {
         throw new Error("Usuario no encontrado");
       }
 
-      // Actualizar la contraseña del usuario
+      
       const hashedPassword = await hashPassword(newPassword);
       user.password = hashedPassword;
       await user.save();

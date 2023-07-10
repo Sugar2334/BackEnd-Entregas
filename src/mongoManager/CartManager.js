@@ -4,6 +4,7 @@ import { errors } from "../utils/errors.js";
 import { v4 as uuidv4 } from 'uuid';
 
 class CartManager {
+
   async createCart() {
     try {
       const cart = await cartModel.create({
@@ -39,20 +40,26 @@ class CartManager {
     }
   }
 
-  async addToCart(cid, pid) {
+  async addToCart(cid, prod, user) {
     try {
-      const getId = await cartModel.findById(cid);
 
-      // me fijo si el carrito esta creado
+      if (prod.owner === user.email) {
+        return { error: 'No puedes agregar tu propio producto' };
+      }
+
+      const getId = await cartModel.findById(cid).populate('products._id');
       if (!!getId) {
-        const getProd = getId.products.find((e) => e._id == pid);
-
+        const getProd = getId.products.find((e) => e._id._id == prod._id);
+        if (getProd && getProd.owner === user.email) {
+          return { error: 'No puedes agregar tu propio producto' };
+        }
+  
         if (!getProd) {
-          getId.products.push({ _id: pid, quantity: 1 });
+          getId.products.push({ _id: prod._id, quantity: 1 });
           await getId.save();
-          return { message: "agregado con exito" };
+          return { message: "Agregado con éxito" };
         } else {
-          return errors.productAlreadyExists;
+          return { error: 'El producto ya existe' };
         }
       } else {
         return errors.invalidCart;
@@ -61,7 +68,7 @@ class CartManager {
       console.log(err);
       return errors.unknownError;
     }
-  }
+  }  
 
   async sumQuantity(cid, pid, quantity) {
     const getId = await cartModel.findById(cid);

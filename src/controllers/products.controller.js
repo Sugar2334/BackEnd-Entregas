@@ -3,6 +3,7 @@ import { faker } from "@faker-js/faker";
 import { logger } from "../utils/logger.js";
 import { errors } from "../utils/errors.js";
 import { transporter } from "../controllers/user.controller.js";
+import config from "../config/config.js";
 
 const prod = new ProductManager();
 
@@ -11,10 +12,10 @@ export const getProds = async (req, res) => {
     const { title, page, limit, sort } = req.query;
     const result = await prod.getPagination(title, limit, page, sort);
     const next = result.hasNextPage
-      ? `http://localhost:8080/api/products?page=${result.nextPage}`
+      ? `${config.rail}/api/products?page=${result.nextPage}`
       : null;
     const prev = result.hasPrevPage
-      ? `http://localhost:8080/api/products?page=${result.prevPage}`
+      ? `${config.rail}/api/products?page=${result.prevPage}`
       : null;
     res.status(200).json({
       status: "sucess",
@@ -47,7 +48,6 @@ export const getById = async (req, res) => {
 
 export const addProd = async (req, res) => {
   try {
-    // Si el usuario no es admin guardar el mail del usuario premium
     const owner = req.user.role === 'admin' ? req.user.role : req.user.email
 
     const productData = { ...req.body, owner: owner };
@@ -83,7 +83,6 @@ export const deleteProd = async (req, res) => {
 
     const deletedProduct = await MongoManager.deleteProduct(pid);
 
-    // si el dueño del prod no es el admin mandar un mail registrado
     if (deletedProduct.owner !== "admin") {
 
       const mailOptions = {

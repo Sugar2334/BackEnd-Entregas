@@ -19,6 +19,7 @@ export const isAdmin = (req, res, next) => {
 
 export const isPremium = (req, res, next) => {
   const role = req.session.role;
+  console.log(role);
   if (role === "premium" || role === "admin") {
     next();
   } else {
@@ -27,28 +28,27 @@ export const isPremium = (req, res, next) => {
 };
 
 export const checkOwner = async (req, res, next) => {
-  const userId = req.user.id; // Obtén el ID del usuario de la solicitud (asumiendo que estás utilizando un middleware de autenticación para establecer el usuario en el objeto de solicitud)
+  const owner = req.user.email;
 
   try {
-    const productId = req.params.id; // Obtén el ID del producto de los parámetros de la ruta o del cuerpo de la solicitud, dependiendo de cómo esté configurado tu enrutador
-
+    const productId = req.params.id;
     const product = await productManager.getProductById(productId);
 
     if (!product) {
       return res.status(404).json({ message: "Producto no encontrado" });
     }
 
-    // Verificar si el usuario es un administrador
+    
     if (req.user.role === "admin") {
-      return next(); // Permiso concedido para el administrador
+      return next();
     }
 
-    // Verificar si el usuario es propietario del producto
+   
     if (product.owner === owner) {
       return next();
     }
 
-    // Si no se cumple ninguna de las condiciones anteriores, el usuario no tiene permiso
+    
     return res
       .status(403)
       .json({ message: "No tienes permiso para realizar esta acción" });

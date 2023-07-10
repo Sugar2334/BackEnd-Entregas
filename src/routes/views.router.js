@@ -3,6 +3,7 @@ import CartManager from "../mongoManager/CartManager.js"
 import UserManager from "../mongoManager/UserManager.js"
 import session from 'express-session'
 import { mocking } from "../controllers/products.controller.js"
+import { isPremium } from "../middlewares/role.middleware.js"
 
 const views = Router()
 const cartManager = new CartManager()
@@ -12,8 +13,8 @@ views.get("/", (req, res) => {
   res.render("home");
 });
 
-views.get("/realtimeproducts", (req, res) => {
-res.render("realTimeProducts");
+views.get("/realtimeproducts", isPremium, async (req, res) => {
+res.render("realTimeProducts", { user: req.session  });
 });
 
 views.get("/chat", (req, res) => {
@@ -26,21 +27,18 @@ res.render("products", user);
 });
 
 views.get("/cart/:id", async (req, res) => {
-res.render("cart", {cart: await cartManager.getCart(req.params.id) });
+res.render("cart", {cart: await cartManager.getCart(req.params.id), user: req.session.id  });
 });
+
+views.delete('/cart/:id', async (req, res) => {
+  const { id } = req.params
+  await cartManager.emptyCart(id)
+  res.send(`<a href="/">Volver</a>`)
+})
 
 views.get("/products/:id", async (req, res) => {
 res.render("products", { user: await userManager.checkUser(req.params.id) });
 });
-
-//views.get('/cart/:id/purchase', async (req, res) => {
-//res.render('purchase')
-//})
-
-// render desde session.router.js para borrar la cookie
-// views.get("/login", (req, res) => {
-//   res.render("login");
-// });
 
 views.get("/signup", (req, res) => {
 res.render("signup");
