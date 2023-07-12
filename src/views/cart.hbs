@@ -24,6 +24,15 @@
             <input type="submit" value="Finalizar compra" />
           </form>
         {{/if}}
+        </div>
+  <button type='button' id='emtpyCartBtn'> Empty cart </button>
+  <div>
+    <button type='button' id='purchaseBtnCash'> Pay with cash </button>
+    <button type='button' id='purchaseBtnCard'> Pay with card </button>
+  </div>
+  {{else}}
+  <h2>Cart is empty</h2>
+  {{/if}}
       </section>
 
     </main>

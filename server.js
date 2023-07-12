@@ -19,6 +19,7 @@ import mongoStore from "connect-mongo"
 import passport from "passport";
 import cors from 'cors'
 import swaggerSpec from './src/config/swaggerConfig.js'
+import StripePayment from './src/utils/stripePayment.js';
 import { __dirname } from "./src/utils.js";
 import { Server } from "socket.io";
 import cookieRouter from "./src/routes/cookie.router.js";
