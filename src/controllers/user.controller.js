@@ -85,7 +85,7 @@ export const requestPasswordReset = async (req, res) => {
    
     const mailOptions = {
       from: 'noreply@example.com',
-      to: email,
+      to: user.email,
       subject: 'Restablecimiento de contraseña',
       html: `<p>Haz clic <a href="${config.rail}/reset-password/${resetToken}">aquí</a> para restablecer tu contraseña.</p>`,
     };
