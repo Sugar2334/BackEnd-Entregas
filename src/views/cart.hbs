@@ -20,19 +20,11 @@
           </div>
         {{/each}}
         {{#if cart.products}}
+          <button onclick="emptyCart('{{cart._id}}')">Borrar carrito</button>
           <form id="purchaseForm" method="post" action="">
             <input type="submit" value="Finalizar compra" />
           </form>
         {{/if}}
-        </div>
-  <button type='button' id='emtpyCartBtn'> Empty cart </button>
-  <div>
-    <button type='button' id='purchaseBtnCash'> Pay with cash </button>
-    <button type='button' id='purchaseBtnCard'> Pay with card </button>
-  </div>
-  {{else}}
-  <h2>Cart is empty</h2>
-  {{/if}}
       </section>
 
     </main>
@@ -44,7 +36,7 @@
       fetch(`/cart/${cartId}`, { method: 'DELETE' })
       .then(response => {
         if (response.ok) {
-          window.location.href = '/';
+          window.location.href = '/'; // Redirige a la página principal después de borrar el carrito
         } else {
           console.error('Failed to delete cart');
         }

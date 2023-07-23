@@ -12,11 +12,9 @@ export default class PaymentsRouter extends express.Router {
   setup = () => {
     this.post(
       '/:cartID/purchase/',
-      // Verifies user is logged in
+     
       [
         isAuthenticated,
-        /* (req, res, next) =>
-          this.authorizator.authorizateRegularUser(req, res, next), */
       ],
       this.paymentController.makePurchase
     );

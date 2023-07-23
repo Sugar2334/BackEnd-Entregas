@@ -20,7 +20,6 @@ sessionRouter.get('/login/github', passport.authenticate('github', {scope: ['use
 sessionRouter.get('/login/github/callback', passport.authenticate('github'), githubCallback)
 
 // Ruta para restablecer la contraseña
-// sessionRouter.post('/reset-password', resetPassword);
 sessionRouter.post('/request-password', requestPasswordReset);
 sessionRouter.post('/reset-password', resetPassword);
 

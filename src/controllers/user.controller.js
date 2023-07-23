@@ -65,24 +65,23 @@ export let transporter = nodemailer.createTransport({
     pass: config.nodemailerPass, 
   },
   tls: {
-    rejectUnauthorized: false, // Ignorar la verificación del certificado
+    rejectUnauthorized: false,
   },
 });
 export const requestPasswordReset = async (req, res) => {
   const { email } = req.body;
   const user = await userManager.checkByEmail(email);
   const resetToken = generateToken(user);
-
+  
   try {
     if (user) {
-
       user.resetToken = resetToken;
+      
       await user.save();
     } else {
-   
       return res.status(404).json({ message: "Usuario no encontrado" });
     }
-
+    
    
     const mailOptions = {
       from: 'noreply@example.com',
@@ -90,9 +89,10 @@ export const requestPasswordReset = async (req, res) => {
       subject: 'Restablecimiento de contraseña',
       html: `<p>Haz clic <a href="${config.rail}/reset-password/${resetToken}">aquí</a> para restablecer tu contraseña.</p>`,
     };
-
+    console.log('antessendmail')
+    
     await transporter.sendMail(mailOptions);
-
+    console.log('despuessendmail')
     res.json({ message: 'Correo electrónico de restablecimiento de contraseña enviado' });
   } catch (error) {
     console.log(error);
@@ -101,11 +101,13 @@ export const requestPasswordReset = async (req, res) => {
 };
 
 export const resetPassword = async (req, res) => {
+
   const { token, password } = req.body;
 
   try {
     
     let decodedToken;
+    console.log(decodedToken)
     try {
       decodedToken = jwt.verify(token, config.secretJwt);
     } catch (err) {

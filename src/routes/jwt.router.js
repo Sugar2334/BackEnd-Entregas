@@ -7,7 +7,7 @@ const jwtRouter = Router()
 const userManager = new UserManager()
 
 jwtRouter.post('/login', async (req, res) => {
-    // const { email, password } = req.body
+    
     const user = await userManager.loginUser(req.body)
     if (user) {
         const token = generateToken(user)
