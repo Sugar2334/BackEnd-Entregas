@@ -54,7 +54,7 @@ button {
 /* cart */
 
 .body-cart {
-  background-color: #333;
+  background-color: #636161;
   text-align: center;
 }
 
@@ -292,7 +292,7 @@ button {
 /* realtimeproducts */
 
 .body-form-products {
-  background-color: #333;
+  background-color: #706666;
 }
 
 #form {
@@ -335,7 +335,7 @@ button {
 /* signup */
 
 .body-signup {
-  background-color: #333;
+  background-color: #6e6b6b;
   color: whitesmoke;
 }
 
@@ -363,7 +363,7 @@ button {
 
 .btn-enviar-signup {
   background-color: #fff;
-  color: #333;
+  color: #726c6c;
 }
 
 .btn-enviar-signup:hover {

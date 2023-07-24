@@ -42,33 +42,46 @@ class CartManager {
 
   async addToCart(cid, prod, user) {
     try {
-
       if (prod.owner === user.email) {
         return { error: 'No puedes agregar tu propio producto' };
       }
-
-      const getId = await cartModel.findById(cid).populate('products._id');
-      if (!!getId) {
-        const getProd = getId.products.find((e) => e._id._id == prod._id);
-        if (getProd && getProd.owner === user.email) {
-          return { error: 'No puedes agregar tu propio producto' };
-        }
   
-        if (!getProd) {
-          getId.products.push({ _id: prod._id, quantity: 1 });
-          await getId.save();
-          return { message: "Agregado con éxito" };
-        } else {
-          return { error: 'El producto ya existe' };
-        }
-      } else {
+      const cart = await cartModel.findById(cid);
+  
+      if (!cart) {
         return errors.invalidCart;
+      }
+  
+      // Crear una nueva lista de productos que será llenada con los productos completos
+      let fullProducts = [];
+  
+      // Recorrer cada producto en el carrito y buscar el producto completo en la base de datos
+      for (let product of cart.products) {
+        const fullProduct = await productModel.findById(product._id);
+      
+        if (fullProduct) {
+          // Si el producto completo fue encontrado, añadirlo a la lista
+          fullProducts.push(fullProduct);
+        }
+      }
+  
+      // Asegúrate de que el producto no está en el carrito y el propietario del producto no es el usuario
+      const productIndex = fullProducts.findIndex((p) => p._id.toString() === prod._id.toString() && p.owner === user.email);
+  
+      if (productIndex > -1) {
+        // Si el producto ya está en el carrito, devuelve un error
+        return { error: 'El producto ya existe' };
+      } else {
+        // Si no está en el carrito, lo agregas
+        cart.products.push({ _id: prod._id, quantity: 1 });
+        await cart.save();
+        return { message: "Agregado con éxito" };
       }
     } catch (err) {
       console.log(err);
       return errors.unknownError;
     }
-  }  
+  }
 
   async sumQuantity(cid, pid, quantity) {
     const getId = await cartModel.findById(cid);

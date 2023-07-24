@@ -121,18 +121,22 @@ socketServer.on("connection", (socket) => {
   })
 
   socket.on("send", async (prod, user) => {
+    console.log(user)
     const posted = await path.addProduct(prod);
-    const prods = await path.getProducts(user.email);
+    if(user && user.email) {
+      const prods = await path.getProducts(user.email);
+    }
+    const prods = await path.getProducts("");
     socket.emit("alert", "Producto agregado");
     socket.emit("prods", prods);
   });
 
   socket.on("delete", async (id, user) => {
-    const deleted = await path.deleteProduct(id, user.role);
-    const prods = await path.getProducts(user.email);
+    const deleted = await path.deleteProduct(id, user);
+    const prods = await path.getProducts(user);
     if (deleted) {
-      socket.emit("prods", prods);
       socket.emit("alert", deleted.message);
+      socket.emit("prods", prods);
     } else {
       socket.emit("alert", "Sin acceso para borrar el producto");
     }

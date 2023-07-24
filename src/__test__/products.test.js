@@ -27,7 +27,7 @@ describe("Product Controller", () => {
     });
     
     it("should return a specific product by ID", async () => {
-      const productId = "641e6c29a9b1fb0f8bf81078";
+      const productId = "64bed15109e7e07651a6ec65";
       const res = await request(serverLocal).get(`/api/products/${productId}`);
       expect(res.status).to.equal(200);
       expect(res.body).to.have.property("title");
@@ -49,7 +49,7 @@ describe("POST /api/products", () => {
 
    describe("PUT /api/products/:id", () => {
      it("should update a product", async () => {
-       const productId = "641e6c29a9b1fb0f8bf81078";
+       const productId = "64bec4d9bf68f80865062f7f";
        const updatedData = { title: "Mango", price: 19.99 };
        const res = await request(serverLocal)
          .put(`/api/products/${productId}`)
@@ -62,7 +62,7 @@ describe("POST /api/products", () => {
 
    describe("DELETE /api/products/:id", () => {
      it("should delete a product", async () => {
-       const productId = "641e6c29a9b1fb0f8bf81078";
+       const productId = "64bec4d9bf68f80865062f7f";
        const res = await request(serverLocal).delete(
          `/api/products/${productId}`
        );

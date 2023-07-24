@@ -13,7 +13,7 @@ const id = document.getElementById("idField");
 
 socketClient.emit('showProds')
 
-socketClient.on("prods", (e) => {
+/*socketClient.on("prods", (e) => {
   prods.innerHTML = "";
   e.map((e) => {
     let div = document.createElement("div");
@@ -65,4 +65,4 @@ formDelete.onsubmit = (e) => {
   e.preventDefault();
   socketClient.emit("delete", id.value);
   id.value = "";
-};
+};*/
