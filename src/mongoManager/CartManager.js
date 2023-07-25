@@ -2,6 +2,7 @@ import { cartModel } from "../models/carts.model.js";
 import { ticketModel } from "../models/ticket.model.js";
 import { errors } from "../utils/errors.js";
 import { v4 as uuidv4 } from 'uuid';
+import { productModel } from "../models/products.model.js";
 
 class CartManager {
 
