@@ -81,6 +81,7 @@ export const sumQuantity = async (req, res) => {
   try {
     const params = req.params;
     const { quantity } = req.body;
+    console.log(params,quantity)
     const result = await cart.sumQuantity(params.cid, params.pid, quantity);
     res.json(result);
   } catch (error) {

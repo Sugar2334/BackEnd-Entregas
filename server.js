@@ -126,7 +126,7 @@ socketServer.on("connection", (socket) => {
     if(user && user.email) {
       const prods = await path.getProducts(user.email);
     }
-    const prods = await path.getProducts("");
+    const prods = await path.getProducts();
     socket.emit("alert", "Producto agregado");
     socket.emit("prods", prods);
   });

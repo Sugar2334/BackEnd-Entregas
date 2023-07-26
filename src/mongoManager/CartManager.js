@@ -42,17 +42,15 @@ class CartManager {
   }
 
   async addToCart(cid, prod, user) {
+    console.log(prod)
     try {
       if (prod.owner === user.email) {
         return { error: 'No puedes agregar tu propio producto' };
       }
-  
-      const cart = await cartModel.findById(cid);
-  
+      const cart = await cartModel.findById(cid);  
       if (!cart) {
         return errors.invalidCart;
       }
-  
       // Crear una nueva lista de productos que será llenada con los productos completos
       let fullProducts = [];
   
@@ -65,16 +63,15 @@ class CartManager {
           fullProducts.push(fullProduct);
         }
       }
-  
       // Asegúrate de que el producto no está en el carrito y el propietario del producto no es el usuario
-      const productIndex = fullProducts.findIndex((p) => p._id.toString() === prod._id.toString() && p.owner === user.email);
+      const productIndex = fullProducts.findIndex((p) => p._id.toString() === prod.toString() && p.owner === user.email);
   
       if (productIndex > -1) {
         // Si el producto ya está en el carrito, devuelve un error
-        return { error: 'El producto ya existe' };
+        await sumQuantity(cid, pid, 1)
       } else {
         // Si no está en el carrito, lo agregas
-        cart.products.push({ _id: prod._id, quantity: 1 });
+        cart.products.push({ _id: prod, quantity: 1 });
         await cart.save();
         return { message: "Agregado con éxito" };
       }
@@ -86,7 +83,7 @@ class CartManager {
 
   async sumQuantity(cid, pid, quantity) {
     const getId = await cartModel.findById(cid);
-
+    console.log("carrito", getId)
     // me fijo si el carrito esta creado
     if (!!getId) {
       const getProd = getId.products.find((e) => e._id == pid);
@@ -146,8 +143,10 @@ class CartManager {
         .findById(cid)
         .populate({ path: "products._id" });
       const productsToPurchase = [];
+      console.log(cart)
       const productsNotPurchased = [];
       for (const product of cart.products) {
+        console.log(product);
         const availableStock = product._id.stock;
         const requestedQuantity = product.quantity;
         console.log(product);
