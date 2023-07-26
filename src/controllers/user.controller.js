@@ -2,9 +2,9 @@ import UserManager from "../mongoManager/UserManager.js";
 import UserDTO from '../dto/UserDTO.js'
 import { logger } from "../utils/logger.js";
 import { generateToken, hashPassword, comparePasswords } from "../utils.js";
-import nodemailer from "nodemailer";
 import config from "../config/config.js";
 import jwt from 'jsonwebtoken'
+import { transporter } from "../utils/nodemailer.js"
 
 const userManager = new UserManager();
 
@@ -57,17 +57,6 @@ export const getCurrent = (req, res) => {
   }
 };
 
-export let transporter = nodemailer.createTransport({
-  service: "gmail",
-  port: 587,
-  auth: {
-    user: config.nodemailerMail,
-    pass: config.nodemailerPass, 
-  },
-  tls: {
-    rejectUnauthorized: false,
-  },
-});
 export const requestPasswordReset = async (req, res) => {
   const { email } = req.body;
   const user = await userManager.checkByEmail(email);

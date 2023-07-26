@@ -42,12 +42,17 @@ class CartManager {
   }
 
   async addToCart(cid, prod, user) {
-    console.log(prod)
     try {
       if (prod.owner === user.email) {
         return { error: 'No puedes agregar tu propio producto' };
       }
-      const cart = await cartModel.findById(cid);  
+
+      if( user.cart.toLowerCase() !== cid.toLowerCase()) {
+        return { error: 'No puedes agregar a un carrito que no es tuyo' };
+      }
+      const cart = await cartModel.findById(cid); 
+      
+       
       if (!cart) {
         return errors.invalidCart;
       }
@@ -64,17 +69,17 @@ class CartManager {
         }
       }
       // Asegúrate de que el producto no está en el carrito y el propietario del producto no es el usuario
-      const productIndex = fullProducts.findIndex((p) => p._id.toString() === prod.toString() && p.owner === user.email);
+      const productIndex = fullProducts.findIndex((p) => p._id.toString() === prod.toString());
   
       if (productIndex > -1) {
         // Si el producto ya está en el carrito, devuelve un error
-        await sumQuantity(cid, pid, 1)
+        cart.products[productIndex].quantity += 1 
       } else {
         // Si no está en el carrito, lo agregas
         cart.products.push({ _id: prod, quantity: 1 });
-        await cart.save();
-        return { message: "Agregado con éxito" };
       }
+      await cart.save();
+      return { message: "Agregado con éxito" };
     } catch (err) {
       console.log(err);
       return errors.unknownError;

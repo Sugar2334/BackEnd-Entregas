@@ -1,4 +1,4 @@
-import { transporter } from "../controllers/user.controller.js";
+import { transporter } from "../utils/nodemailer.js";
 import { productModel } from "../models/products.model.js";
 
 class ProductManager {

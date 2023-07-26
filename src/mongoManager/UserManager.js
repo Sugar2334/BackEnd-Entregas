@@ -1,7 +1,7 @@
 import { userModel } from "../models/users.model.js";
 import { cartModel } from "../models/carts.model.js";
 import { comparePasswords, hashPassword } from "../utils.js"
-import { transporter } from "../controllers/user.controller.js";
+import { transporter } from "../utils/nodemailer.js";
 
 class UserManager {
   async createUser(user) {

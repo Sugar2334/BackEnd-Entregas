@@ -2,7 +2,7 @@ import ProductManager from "../mongoManager/ProductManager.js";
 import { faker } from "@faker-js/faker";
 import { logger } from "../utils/logger.js";
 import { errors } from "../utils/errors.js";
-import { transporter } from "../controllers/user.controller.js";
+import { transporter } from "../utils/nodemailer.js"
 import config from "../config/config.js";
 
 const prod = new ProductManager();
